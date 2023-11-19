@@ -73,12 +73,12 @@ class LLama:
 
         # Create the list that will contain the generated tokens, along with the initial prompt tokens
         pad_id = self.tokenizer.pad_id()
-        tokens = torch.full((batch_size, total_len), pad_id, dtype=torch.long, device='mps')
+        tokens = torch.full((batch_size, total_len), pad_id, dtype=torch.long, device=device)
         for k, t in enumerate(prompt_tokens):
             # Populate the initial tokens with the prompt tokens
-            tokens[k, : len(t)] = torch.tensor(t, dtype=torch.long, device='mps')
+            tokens[k, : len(t)] = torch.tensor(t, dtype=torch.long, device=device)
 
-        eos_reached = torch.tensor([False] * batch_size, device='mps')
+        eos_reached = torch.tensor([False] * batch_size, device=device)
         prompt_tokens_mask = tokens != pad_id  # True if the token is a prompt token, False otherwise
         cur_iterator = tqdm(range(1, total_len), desc="Generating tokens")
         for cur_pos in cur_iterator:
